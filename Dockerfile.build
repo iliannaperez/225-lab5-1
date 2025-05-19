@@ -1,0 +1,19 @@
+FROM python:3.11-slim
+
+# Create app directory
+WORKDIR /app
+
+# Copy code
+COPY main.py .
+
+# Install dependencies
+RUN pip install flask
+
+# Make sure the /nfs volume exists
+RUN mkdir -p /nfs
+
+# Expose the Flask port
+EXPOSE 5000
+
+# Run the app
+CMD ["python", "main.py"]
