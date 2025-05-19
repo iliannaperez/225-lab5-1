@@ -18,7 +18,7 @@ spec:
         - name: docker-creds
       containers:
         - name: flask
-          image: cithit/perezi3:build-45   # Jenkins will update this with build tag
+          image: cithit/perezi3:build-46   # Jenkins will update this with build tag
           ports:
             - containerPort: 5000
           volumeMounts:
