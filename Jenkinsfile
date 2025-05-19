@@ -2,11 +2,11 @@ pipeline {
     agent any 
 
     environment {
-        DOCKER_CREDENTIALS_ID = 'roseaw-dockerhub'  // Leave this unless told otherwise
-        DOCKER_IMAGE = 'cithit/perezi3'             // Use your MiamiID
+        DOCKER_CREDENTIALS_ID = 'roseaw-dockerhub'  
+        DOCKER_IMAGE = 'cithit/perezi3'
         IMAGE_TAG = "build-${BUILD_NUMBER}"
         GITHUB_URL = 'https://github.com/iliannaperez/225-lab5-1.git'
-        KUBECONFIG = credentials('perezi3-225')     // Use your kubeconfig Jenkins credential
+        KUBECONFIG = credentials('perezi3-225')
     }
 
     stages {
@@ -53,9 +53,20 @@ pipeline {
             }
         }
 
+        stage('Deploy to Prod Environment') {
+            steps {
+                script {
+                    sh "sed -i 's|${DOCKER_IMAGE}:latest|${DOCKER_IMAGE}:${IMAGE_TAG}|' deployment-prod.yaml"
+                    sh "kubectl apply -f deployment-prod.yaml"
+                }
+            }
+        }
+
         stage('Check Kubernetes Cluster') {
             steps {
-                sh "kubectl get all"
+                script {
+                    sh "kubectl get all"
+                }
             }
         }
     }
